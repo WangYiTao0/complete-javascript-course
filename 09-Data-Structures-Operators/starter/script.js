@@ -45,3 +45,9 @@ const restaurant = {
     },
   },
 };
+
+let [main, , secondary] = restaurant.categories;
+console.log(main, secondary);
+// swiching variables
+[secondary, main] = [main, secondary];
+console.log(main, secondary);
