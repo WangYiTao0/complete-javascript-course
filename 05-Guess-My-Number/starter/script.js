@@ -26,43 +26,58 @@ let checkElement = document.querySelector('.check');
 let againElement = document.querySelector('.again');
 let bodyElement = document.querySelector('body');
 
+function displayMessage(message) {
+  messageElement.textContent = message;
+}
+
 const onCheckBtnClick = function () {
   let guessValue = Number(document.querySelector('.guess').value);
   if (score <= 0) {
-    messageElement.textContent = '💥 You lost the game!';
+    displayMessage('💥 You lost the game!');
     return;
   }
   if (!guessValue) {
-    messageElement.textContent = '⛔ No number!';
+    displayMessage('⛔ No number!');
   } else if (guessValue > 20 || guessValue < 1) {
-    messageElement.textContent = '❌ Number must be between 1 and 20!';
+    displayMessage('⛔ Number out of range!');
   } else if (guessValue === randomNumber) {
-    messageElement.textContent = 'Correct Number! 🎉';
+    displayMessage('🎉 Correct Number!');
+    gameWin();
+    updateHighScore();
+
+    highscore = Math.max(score, highscore);
+  } else if (guessValue != randomNumber) {
+    if (guessValue > randomNumber) {
+      displayMessage('📉 Too high!');
+    } else if (guessValue < randomNumber) {
+      displayMessage('📈 Too low!');
+    }
+    score -= 1;
+    scoreElement.textContent = score;
+  }
+
+  function gameWin() {
     bodyElement.style.backgroundColor = '#60b347';
     numberElement.style.width = '30rem';
     numberElement.textContent = randomNumber;
     checkElement.style.display = 'none';
     // score += 10;
     scoreElement.textContent = score;
-    if (score > highscore) {
-      highscore = score;
-      highscoreElement.textContent = highscore;
-    }
-
-    highscore = Math.max(score, highscore);
-  } else if (guessValue != randomNumber) {
-    messageElement.textContent =
-      guessValue > randomNumber ? '📈 Too high!' : '📉 Too low!';
-    score -= 1;
-    scoreElement.textContent = score;
   }
 };
+function updateHighScore() {
+  if (score > highscore) {
+    highscore = score;
+    highscoreElement.textContent = highscore;
+  }
+}
+
 function resetGame() {
   randomNumber = Math.trunc(Math.random() * 20) + 1;
   score = 20;
   scoreElement.textContent = score;
   guessElement.value = '';
-  messageElement.textContent = 'Start guessing...';
+  displayMessage('Start guessing...');
   numberElement.textContent = '?';
   bodyElement.style.backgroundColor = '#222';
   numberElement.style.width = '15rem';
