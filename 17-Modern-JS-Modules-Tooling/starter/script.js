@@ -19,3 +19,7 @@
 import add from './shoppingCart.js';
 
 add('bread', 5);
+
+const res = await fetch('https://jsonplaceholder.typicode.com/posts');
+const data = await res.json();
+console.log(data);
